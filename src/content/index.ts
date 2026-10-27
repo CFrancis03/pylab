@@ -1,14 +1,18 @@
 import type { Region } from './schema'
 import functionForge from './function-forge'
+import generatorGrotto from './generator-grotto'
+import hashHarbor from './hash-harbor'
 import loopCanyon from './loop-canyon'
+import regexJungle from './regex-jungle'
 import slicePeaks from './slice-peaks'
 import snakeNest from './snake-nest'
+import stringBazaar from './string-bazaar'
 import variableValley from './variable-valley'
 
 export { regionMetas } from './regionsMeta'
 
 /** Fully authored regions. Each region file is added here as it is written. */
-export const regions: Region[] = [snakeNest, variableValley, loopCanyon, functionForge, slicePeaks].sort((a, b) => a.order - b.order)
+export const regions: Region[] = [snakeNest, variableValley, loopCanyon, functionForge, slicePeaks, hashHarbor, generatorGrotto, stringBazaar, regexJungle].sort((a, b) => a.order - b.order)
 
 export const getRegion = (id: string): Region | undefined => regions.find((r) => r.id === id)
 
