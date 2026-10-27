@@ -11,7 +11,8 @@
     "test": "vitest run",
     "validate-content": "tsx scripts/validate-content.ts",
     "predev": "tsx scripts/copy-pyodide.ts",
-    "prebuild": "tsx scripts/copy-pyodide.ts"
+    "prebuild": "tsx scripts/copy-pyodide.ts",
+    "verify-pyodide": "tsx scripts/verify-pyodide.ts"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",

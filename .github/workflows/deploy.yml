@@ -30,6 +30,8 @@ jobs:
           npm test
       - name: Verify every authored Python answer under CPython
         run: npm run validate-content
+      - name: Verify the same answers inside Pyodide (Python 3.14 on WebAssembly)
+        run: npm run verify-pyodide
       - name: Build
         run: npm run build
         env:

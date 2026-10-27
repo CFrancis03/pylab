@@ -142,14 +142,14 @@ const htUnhashable: TraceScenario = {
   id: 'ht-unhashable',
   family: 'hash-table',
   title: 'Why lists cannot be keys',
-  code: src('d = {}', 'try:', '    d[[1, 2]] = "list key"', 'except TypeError as e:', '    print("TypeError:", e)', 'd[(1, 2)] = "tuple key"', 'print(d[(1, 2)])'),
-  expectedOutput: "TypeError: unhashable type: 'list'\ntuple key",
+  code: src('d = {}', 'try:', '    d[[1, 2]] = "list key"', 'except TypeError:', '    print("unhashable list key")', 'd[(1, 2)] = "tuple key"', 'print(d[(1, 2)])'),
+  expectedOutput: 'unhashable list key\ntuple key',
   frames: [
     frame(3, 'To store a key, Python first computes hash(key) to decide the slot.', [track('key', chip('[1, 2]', 'active')), track('hash(key)', chip('...'))]),
     frame(3, 'A list can change after it is stored. Its hash would change with it, and the entry would be in the wrong slot forever. So lists have no hash at all.', [track('key', chip('[1, 2]', 'error')), track('hash(key)', chip('TypeError: unhashable', 'error'))]),
-    frame(5, 'The TypeError is caught and printed.', [track('key', chip('[1, 2]', 'error')), track('hash(key)', chip('unhashable', 'error'))], ["TypeError: unhashable type: 'list'"]),
-    frame(6, 'A tuple of immutable items cannot change, so its hash is computed from its contents and stays valid.', [track('key', chip('(1, 2)', 'active')), track('hash(key)', chip('an int, same every time', 'found'))], ["TypeError: unhashable type: 'list'"]),
-    frame(7, 'Looking up an equal tuple gives the same hash, so the same slot, and the value is found.', [track('key', chip('(1, 2)', 'found')), track('hash(key)', chip('same int as before', 'found'))], ["TypeError: unhashable type: 'list'", 'tuple key']),
+    frame(5, 'The TypeError is caught, so the program carries on instead of crashing.', [track('key', chip('[1, 2]', 'error')), track('hash(key)', chip('unhashable', 'error'))], ['unhashable list key']),
+    frame(6, 'A tuple of immutable items cannot change, so its hash is computed from its contents and stays valid.', [track('key', chip('(1, 2)', 'active')), track('hash(key)', chip('an int, same every time', 'found'))], ['unhashable list key']),
+    frame(7, 'Looking up an equal tuple gives the same hash, so the same slot, and the value is found.', [track('key', chip('(1, 2)', 'found')), track('hash(key)', chip('same int as before', 'found'))], ['unhashable list key', 'tuple key']),
   ],
 }
 
