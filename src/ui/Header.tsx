@@ -2,6 +2,8 @@ import { currentStreak } from '../game/streak'
 import { useProgress } from '../game/store'
 import { levelProgress, levelTitle } from '../game/xp'
 import { href, type Route } from '../router'
+import { DECK } from '../study/data'
+import { waitingCount } from '../study/deck'
 import { useToday } from './useToday'
 
 export default function Header({ route }: { route: Route }) {
@@ -9,8 +11,10 @@ export default function Header({ route }: { route: Route }) {
   const lv = levelProgress(p.xp)
   const today = useToday()
   const streak = currentStreak(p.streak, today)
+  const waiting = waitingCount(DECK, p.cards, today)
   const nav = [
     { to: '/', label: 'Map', on: route.name === 'map' || route.name === 'region' || route.name === 'lesson' || route.name === 'boss' },
+    { to: '/study', label: 'Study', on: ['study', 'review', 'exam', 'cards', 'cheatsheet'].includes(route.name), badge: waiting },
     { to: '/profile', label: 'Profile', on: route.name === 'profile' },
     { to: '/settings', label: 'Settings', on: route.name === 'settings' },
   ]
@@ -32,7 +36,10 @@ export default function Header({ route }: { route: Route }) {
       </div>
       <nav>
         {nav.map((n) => (
-          <a key={n.to} href={href(n.to)} aria-current={n.on ? 'page' : undefined}>{n.label}</a>
+          <a key={n.to} href={href(n.to)} aria-current={n.on ? 'page' : undefined}>
+            {n.label}
+            {n.badge ? <span className="pill" data-testid="due-pill" title="Flashcards waiting today">{n.badge}</span> : null}
+          </a>
         ))}
       </nav>
     </header>

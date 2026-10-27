@@ -2,8 +2,8 @@ import { useSyncExternalStore } from 'react'
 import { regions } from '../content'
 import { BADGES, type BadgeCtx } from './badges'
 import {
-  emptyProgress, parseProgress, recordActivity, recordBoss,
-  type ActivityResult, type GameEvent, type Progress, type Settings,
+  emptyProgress, parseProgress, recordActivity, recordBoss, recordExam, recordPractice,
+  type ActivityResult, type ExamResult, type GameEvent, type Progress, type Settings,
 } from './progress'
 import { rateCard } from './srs'
 import { dayKey } from './streak'
@@ -66,6 +66,19 @@ export function completeActivity(a: ActivityResult) {
 
 export function finishBoss(regionId: string, score: number, passMark: number, bossXp = 100) {
   const out = recordBoss(state, regionId, score, passMark, bossXp, badgeCtx(), new Date())
+  commit(out.progress)
+  announce(out.events)
+}
+
+/** A review or mock-exam answer: counts toward topic stats and the streak, but pays no XP. */
+export function practiceAnswer(a: Pick<ActivityResult, 'id' | 'topic' | 'correct'>) {
+  const out = recordPractice(state, a, badgeCtx(), new Date())
+  commit(out.progress)
+  announce(out.events)
+}
+
+export function finishExam(e: ExamResult) {
+  const out = recordExam(state, e, badgeCtx(), new Date())
   commit(out.progress)
   announce(out.events)
 }

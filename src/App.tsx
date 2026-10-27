@@ -2,12 +2,17 @@ import './App.css'
 import { lazy, Suspense, useEffect } from 'react'
 import { useProgress } from './game/store'
 import BossPage from './pages/BossPage'
+import CardsPage from './pages/CardsPage'
+import CheatSheetPage from './pages/CheatSheetPage'
+import ExamPage from './pages/ExamPage'
 import LessonPage from './pages/LessonPage'
 import NotFound from './pages/NotFound'
 import OverworldMap from './pages/OverworldMap'
 import ProfilePage from './pages/ProfilePage'
 import RegionPage from './pages/RegionPage'
+import ReviewPage from './pages/ReviewPage'
 import SettingsPage from './pages/SettingsPage'
+import StudyPage from './pages/StudyPage'
 import { matchRoute, useRoutePath } from './router'
 import Header from './ui/Header'
 import Toasts from './ui/Toasts'
@@ -38,6 +43,11 @@ export default function App() {
     case 'region': page = <RegionPage id={route.id} />; break
     case 'boss': page = <BossPage id={route.id} />; break
     case 'lesson': page = <LessonPage id={route.id} lessonId={route.lessonId} />; break
+    case 'study': page = <StudyPage />; break
+    case 'review': page = <ReviewPage />; break
+    case 'exam': page = <ExamPage />; break
+    case 'cards': page = <CardsPage />; break
+    case 'cheatsheet': page = <CheatSheetPage />; break
     case 'profile': page = <ProfilePage />; break
     case 'settings': page = <SettingsPage />; break
     case 'dev-viz': page = VizLab ? <Suspense fallback={null}><VizLab /></Suspense> : <NotFound />; break

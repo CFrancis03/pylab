@@ -4,6 +4,18 @@ An interactive quest-map for studying CSCI 503/490 Python. It is a static site t
 
 **Live site:** https://cfrancis03.github.io/pylab/
 
+## Study tools
+
+Under **Study** in the header:
+
+- **Review mode:** a quiz that favours your weakest topics and the questions you have missed.
+- **Mock exam:** mixed questions from the regions you choose, optionally timed, with a per-topic breakdown.
+- **Daily flashcards:** a spaced-repetition deck (new cards a few at a time, then 1, 3, 7, 14 and 30 day reviews).
+- **Dashboard:** accuracy, progress by region, weakest topics and exam history.
+- **Cheat sheet:** every concept card and flashcard on one printable page (print to PDF).
+
+Review and exam answers count toward your stats and streak but never pay XP or mark lessons complete.
+
 ## Develop
 
 ```bash
@@ -12,6 +24,7 @@ npm run dev               # http://localhost:5173 (also copies the Pyodide runti
 npm test                  # unit tests
 npm run lint
 npm run validate-content  # runs every authored Python answer under local CPython (needs python3)
+npm run verify-pyodide    # runs them again inside Pyodide, the engine learners actually use
 npm run build
 ```
 

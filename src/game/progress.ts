@@ -25,6 +25,24 @@ export const progressSchema = z.object({
     last: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
   }),
   badges: z.record(z.string(), z.number()),
+  /** Every answer given to each activity (lessons, review and mock exams). Drives which questions review brings back. */
+  items: z
+    .record(z.string(), z.object({ right: z.number().int().nonnegative(), wrong: z.number().int().nonnegative(), last: z.number() }))
+    .default({}),
+  /** Review and mock-exam answers given, for the Reviewer badge. */
+  practice: z.number().int().nonnegative().default(0),
+  /** Finished mock exams, newest last. */
+  exams: z
+    .array(
+      z.object({
+        at: z.number(),
+        correct: z.number().int().nonnegative(),
+        total: z.number().int().positive(),
+        seconds: z.number().int().nonnegative(),
+        regions: z.array(z.string()),
+      }),
+    )
+    .default([]),
   /** Flashcard scheduling: Leitner box and next-due day, keyed `activityId#index`. */
   cards: z.record(z.string(), z.object({ box: z.number().int().min(0).max(5), due: z.string() })).default({}),
   settings: z
@@ -54,6 +72,9 @@ export const emptyProgress = (): Progress => ({
   bosses: {},
   streak: emptyStreak(),
   badges: {},
+  items: {},
+  practice: 0,
+  exams: [],
   cards: {},
   settings: { theme: 'system', freeRoam: false },
 })
@@ -99,17 +120,24 @@ function award(p: Progress, amount: number, ctx: BadgeCtx, now: Date, events: Ga
   return next
 }
 
+/** Count one answer against its topic and its activity. */
+function tally(p: Progress, a: Pick<ActivityResult, 'id' | 'topic' | 'correct'>, now: Date): Progress {
+  const t = p.topics[a.topic] ?? { right: 0, wrong: 0 }
+  const i = p.items[a.id] ?? { right: 0, wrong: 0, last: 0 }
+  return {
+    ...p,
+    topics: { ...p.topics, [a.topic]: a.correct ? { ...t, right: t.right + 1 } : { ...t, wrong: t.wrong + 1 } },
+    items: { ...p.items, [a.id]: { right: i.right + (a.correct ? 1 : 0), wrong: i.wrong + (a.correct ? 0 : 1), last: now.getTime() } },
+  }
+}
+
 /**
  * Record one attempt. XP is paid only the first time an activity is answered correctly,
  * so replaying for practice is free but cannot be farmed.
  */
 export function recordActivity(p: Progress, a: ActivityResult, ctx: BadgeCtx, now: Date): Outcome {
   const events: GameEvent[] = []
-  const t = p.topics[a.topic] ?? { right: 0, wrong: 0 }
-  let next: Progress = {
-    ...p,
-    topics: { ...p.topics, [a.topic]: a.correct ? { ...t, right: t.right + 1 } : { ...t, wrong: t.wrong + 1 } },
-  }
+  let next: Progress = tally(p, a, now)
   let amount = 0
   if (a.correct && !next.completed[a.id]) {
     amount = Math.max(0, a.xp)
@@ -140,4 +168,30 @@ export function recordBoss(
     },
   }
   return { progress: award(next, first ? bossXp : 0, ctx, now, events), events }
+}
+
+/**
+ * A review or mock-exam answer. It feeds topic and per-question stats and keeps the streak alive,
+ * but pays no XP and never marks a lesson activity complete, so practice cannot skip the lessons.
+ */
+export function recordPractice(p: Progress, a: Pick<ActivityResult, 'id' | 'topic' | 'correct'>, ctx: BadgeCtx, now: Date): Outcome {
+  const events: GameEvent[] = []
+  const next = { ...tally(p, a, now), practice: p.practice + 1 }
+  return { progress: award(next, 0, ctx, now, events), events }
+}
+
+export interface ExamResult {
+  correct: number
+  total: number
+  seconds: number
+  regions: string[]
+}
+
+const MAX_EXAMS = 20
+
+/** Remember a finished mock exam (the last 20). */
+export function recordExam(p: Progress, e: ExamResult, ctx: BadgeCtx, now: Date): Outcome {
+  const events: GameEvent[] = []
+  const next = { ...p, exams: [...p.exams, { ...e, at: now.getTime() }].slice(-MAX_EXAMS) }
+  return { progress: award(next, 0, ctx, now, events), events }
 }

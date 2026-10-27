@@ -41,6 +41,18 @@ export const BADGES: Badge[] = [
     id: 'boss-slayer', name: 'Boss Slayer', emoji: '⚔️', desc: 'Defeat your first boss.',
     earned: (p) => Object.values(p.bosses).some((b) => b.passed),
   },
+  {
+    id: 'reviewer', name: 'Reviewer', emoji: '📝', desc: 'Answer 25 questions in review mode or mock exams.',
+    earned: (p) => p.practice >= 25,
+  },
+  {
+    id: 'exam-ready', name: 'Exam Ready', emoji: '🎓', desc: 'Score 80% or more on a mock exam of 10+ questions.',
+    earned: (p) => p.exams.some((e) => e.total >= 10 && e.correct / e.total >= 0.8),
+  },
+  {
+    id: 'card-sharp', name: 'Card Sharp', emoji: '🃏', desc: 'Get 30 flashcards past their first review.',
+    earned: (p) => Object.values(p.cards).filter((c) => c.box >= 1).length >= 30,
+  },
 ]
 
 /** Ids of badges that `p` qualifies for and does not hold yet. */
