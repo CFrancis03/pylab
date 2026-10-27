@@ -1,32 +1,30 @@
-# React + TypeScript + Vite
+# Python Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+An interactive quest-map for studying CSCI 503/490 Python. It is a static site that runs **real Python in the browser** (Pyodide in a Web Worker), with XP, levels, streaks, boss battles, code challenges, visualizers and mini-games. Progress is saved in your browser's `localStorage`.
 
-Currently, two official plugins are available:
+**Live site:** https://cfrancis03.github.io/pylab/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Develop
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev               # http://localhost:5173 (also copies the Pyodide runtime into public/pyodide)
+npm test                  # unit tests
+npm run lint
+npm run validate-content  # runs every authored Python answer under local CPython (needs python3)
+npm run build
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Dev-only playground for every visualizer and mini-game: `#/dev/viz`.
+
+## Content
+
+Lessons are data in `src/content/` (one file per region, validated by a zod schema). `npm run validate-content` checks every code-challenge solution, predict-the-output answer, visualizer scenario and mini-game level against real CPython, so an authored answer cannot be wrong.
+
+## Deploy (GitHub Pages)
+
+`.github/workflows/deploy.yml` lints, tests, validates the content, builds with `VITE_BASE=/<repo>/` and publishes `dist/` on every push to `main`.
+
+One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions.**
+
+The site uses hash routing, so it needs no server rewrites, and Pyodide is self-hosted so it works with no CDN.
