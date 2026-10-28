@@ -42,7 +42,7 @@ export default function Parsons({ a, onResult }: { a: P; onResult: (correct: boo
       <p className="question"><Rich text={a.prompt} /></p>
       <div className="parsons">
         <div>
-          <h4>Available lines</h4>
+          <h3>Available lines</h3>
           <ul className="plist" data-testid="pool" aria-label="Available lines">
             {unused.length === 0 && <li className="muted small">All lines used.</li>}
             {unused.map((it) => (
@@ -55,7 +55,7 @@ export default function Parsons({ a, onResult }: { a: P; onResult: (correct: boo
           </ul>
         </div>
         <div>
-          <h4>Your solution</h4>
+          <h3>Your solution</h3>
           <ol className="plist solution" data-testid="built" aria-label="Your solution">
             {built.length === 0 && <li className="muted small">Click lines to add them here, then reorder.</li>}
             {built.map((it, i) => (

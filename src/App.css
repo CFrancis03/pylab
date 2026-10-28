@@ -93,7 +93,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 .activity { margin: 0 0 1rem; }
 .activity-head { display: flex; justify-content: space-between; align-items: center; }
 .tag { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
-.xp-tag { font-size: 0.8rem; font-weight: 800; color: var(--gold); }
+.xp-tag { font-size: 0.8rem; font-weight: 800; color: var(--gold-ink); }
 .is-done .xp-tag { color: var(--ok); }
 .md p, .md ul { margin: 0.4rem 0; }
 .md ul { padding-left: 1.3rem; }
@@ -108,7 +108,9 @@ pre.code { background: var(--surface-2); border-radius: 10px; padding: 0.7rem 0.
 .badges { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 .badge { display: grid; gap: 0.2rem; justify-items: center; text-align: center; }
 .badge-emoji { font-size: 2rem; }
-.badge.is-locked { opacity: 0.55; box-shadow: none; }
+.badge.is-locked { box-shadow: none; background: var(--surface-2); border-style: dashed; }
+.badge.is-locked strong { color: var(--ink-soft); }
+.badge.is-locked .badge-emoji { opacity: 0.6; }
 .topics { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
 .topics li { display: grid; grid-template-columns: 9rem 1fr 3rem; gap: 0.7rem; align-items: center; }
 .topics .bar > span { background: var(--accent); }
@@ -252,6 +254,7 @@ textarea { font-family: var(--mono); font-size: 0.95rem; padding: 0.6rem; backgr
 /* ── slicing explorer ── */
 .slice-cells { display: flex; gap: 0.3rem; overflow-x: auto; padding: 0.4rem 0; }
 .slice-cell { display: grid; justify-items: center; min-width: 3rem; padding: 0.25rem 0.3rem; border-radius: 10px; border: 2px solid var(--line); background: var(--surface); font-family: var(--mono); }
+.slice-cell.picked .slice-pos, .slice-cell.picked .slice-neg { color: var(--ink); }
 .slice-cell.picked { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 26%, var(--surface)); }
 .slice-pos { font-size: 0.75rem; color: var(--ink-soft); }
 .slice-neg { font-size: 0.75rem; color: var(--ink-soft); }
@@ -362,3 +365,24 @@ textarea { font-family: var(--mono); font-size: 0.95rem; padding: 0.6rem; backgr
   .sheet-region > h2 { border-color: #000; }
   .page { padding: 0; max-width: none; }
 }
+.editor-loading { min-height: 9rem; display: grid; place-items: center; border: 2px dashed var(--line); border-radius: 10px; }
+
+/* ── update banner, confetti, motion switch ── */
+.update-banner { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 60; display: flex; gap: 0.8rem; align-items: center; padding: 0.6rem 1rem; border-radius: 12px; background: var(--surface); border: 2px solid var(--accent); box-shadow: var(--shadow); }
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 70; }
+.confetti span { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; opacity: 0; animation: confetti-fall linear forwards; }
+@keyframes confetti-fall {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+  100% { opacity: 0; transform: translate3d(var(--drift), 105vh, 0) rotate(var(--spin)); }
+}
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
+:root[data-motion='off'] .confetti { display: none; }
+:root[data-motion='off'] *, :root[data-motion='off'] *::before, :root[data-motion='off'] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+
+/* ── accessibility ── */
+.activity-title { font-size: 1.15rem; margin: 0.2rem 0 0.4rem; }
+.skip-link { position: absolute; left: 0.6rem; top: -4rem; z-index: 100; padding: 0.5rem 0.9rem; }
+.skip-link:focus { top: 0.6rem; }
+main:focus { outline: none; }
+pre:focus-visible, ol:focus-visible, .diagram-wrap:focus-visible, .slice-cells:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

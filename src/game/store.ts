@@ -5,6 +5,8 @@ import {
   emptyProgress, parseProgress, recordActivity, recordBoss, recordExam, recordPractice,
   type ActivityResult, type ExamResult, type GameEvent, type Progress, type Settings,
 } from './progress'
+import { celebrate } from '../ui/confetti'
+import { playSound } from './sound'
 import { rateCard } from './srs'
 import { dayKey } from './streak'
 import { pushToast } from './toasts'
@@ -50,21 +52,33 @@ function badgeCtx(): BadgeCtx {
 function announce(events: GameEvent[]) {
   for (const e of events) {
     if (e.kind === 'xp') pushToast('xp', `+${e.amount} XP`)
-    else if (e.kind === 'level') pushToast('level', `Level up! You are now a ${levelTitle(e.level)} (Lv ${e.level})`, 5000)
+    else if (e.kind === 'level') {
+      pushToast('level', `Level up! You are now a ${levelTitle(e.level)} (Lv ${e.level})`, 5000)
+      playSound('level', state.settings.sound)
+      celebrate()
+    }
     else if (e.kind === 'badge') {
       const b = BADGES.find((x) => x.id === e.id)
-      if (b) pushToast('badge', `${b.emoji} Badge earned: ${b.name}`, 5000)
+      if (b) {
+        pushToast('badge', `${b.emoji} Badge earned: ${b.name}`, 5000)
+        playSound('badge', state.settings.sound)
+      }
     } else if (e.kind === 'streak' && e.count > 1) pushToast('streak', `🔥 ${e.count}-day streak!`)
   }
 }
 
 export function completeActivity(a: ActivityResult) {
+  playSound(a.correct ? 'correct' : 'wrong', state.settings.sound)
   const out = recordActivity(state, a, badgeCtx(), new Date())
   commit(out.progress)
   announce(out.events)
 }
 
 export function finishBoss(regionId: string, score: number, passMark: number, bossXp = 100) {
+  if (score >= passMark) {
+    playSound('win', state.settings.sound)
+    celebrate()
+  }
   const out = recordBoss(state, regionId, score, passMark, bossXp, badgeCtx(), new Date())
   commit(out.progress)
   announce(out.events)
@@ -72,6 +86,7 @@ export function finishBoss(regionId: string, score: number, passMark: number, bo
 
 /** A review or mock-exam answer: counts toward topic stats and the streak, but pays no XP. */
 export function practiceAnswer(a: Pick<ActivityResult, 'id' | 'topic' | 'correct'>) {
+  playSound(a.correct ? 'correct' : 'wrong', state.settings.sound)
   const out = recordPractice(state, a, badgeCtx(), new Date())
   commit(out.progress)
   announce(out.events)

@@ -40,9 +40,10 @@ export default function CardsPage() {
       {card ? (
         <div>
           <p className="muted small" data-testid="cards-count">{known}/{plan.cards.length} learned · {queue.length} left · {card.regionName}</p>
-          <button className={`flashcard${flipped ? ' flipped' : ''}`} onClick={() => setFlipped((f) => !f)} data-testid="card" aria-label={flipped ? 'Answer. Click to see the question' : 'Question. Click to reveal the answer'}>
+          <button className={`flashcard${flipped ? ' flipped' : ''}`} onClick={() => setFlipped((f) => !f)} data-testid="card">
             <span className="side">{flipped ? 'Answer' : 'Question'}</span>
             <span className="face" data-testid="card-face"><Rich text={flipped ? card.back : card.front} /></span>
+            <span className="sr-only"> (press to {flipped ? 'see the question' : 'reveal the answer'})</span>
           </button>
           {flipped ? (
             <div className="row">

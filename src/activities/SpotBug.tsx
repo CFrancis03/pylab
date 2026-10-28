@@ -28,7 +28,7 @@ export default function SpotBug({ a, onResult }: { a: SB; onResult: (correct: bo
           const cls = [found === n || (state === 'revealed' && a.bugLines.includes(n)) ? 'is-bug' : '', misses.includes(n) ? 'is-miss' : ''].join(' ')
           return (
             <li key={n}>
-              <button className={`bug-line ${cls}`} onClick={() => pick(n)} disabled={locked || misses.includes(n)} data-testid={`line-${n}`} aria-label={`Line ${n}: ${line || 'blank'}`}>
+              <button className={`bug-line ${cls}`} onClick={() => pick(n)} disabled={locked || misses.includes(n)} data-testid={`line-${n}`}>
                 <span className="ln">{n}</span>
                 <code>{line || ' '}</code>
               </button>

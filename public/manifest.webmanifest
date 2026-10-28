@@ -1,0 +1,11 @@
+{
+  "name": "Python Lab: Quest for Pythonia",
+  "short_name": "Python Lab",
+  "description": "An interactive quest map for studying Python, with real code running in your browser.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101a14",
+  "theme_color": "#2f8f4e",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

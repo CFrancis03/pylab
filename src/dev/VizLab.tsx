@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import ScenarioVisualizer from '../visualizers/ScenarioVisualizer'
 import { MINIGAME_VIEWS } from '../minigames'
 import SliceExplorer from '../visualizers/SliceExplorer'
@@ -26,7 +26,7 @@ export default function VizLab() {
       {Object.entries(MINIGAME_VIEWS).map(([name, Game]) => (
         <section key={name} className="card" data-testid={`lab-game-${name}`} data-done={done[`game-${name}`] ? 'true' : 'false'}>
           <h2>mini-game: {name}</h2>
-          <Game onFinished={() => mark(`game-${name}`)} />
+          <Suspense fallback={<p className="muted">Loading…</p>}><Game onFinished={() => mark(`game-${name}`)} /></Suspense>
         </section>
       ))}
       {Object.entries(groups).map(([family, ids]) => (

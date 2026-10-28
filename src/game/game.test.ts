@@ -170,7 +170,11 @@ describe('save files', () => {
   })
   it('fills default settings for older saves', () => {
     const { settings: _s, ...old } = emptyProgress()
-    expect(parseProgress(JSON.stringify(old)).settings).toEqual({ theme: 'system', freeRoam: false })
+    expect(parseProgress(JSON.stringify(old)).settings).toEqual({ theme: 'system', freeRoam: false, sound: false, motion: true })
+  })
+  it('fills the sound and motion switches for saves that only had a theme and free roam', () => {
+    const older = { ...emptyProgress(), settings: { theme: 'dark', freeRoam: true } }
+    expect(parseProgress(JSON.stringify(older)).settings).toEqual({ theme: 'dark', freeRoam: true, sound: false, motion: true })
   })
   it('rejects garbage and wrong shapes with friendly messages', () => {
     expect(() => parseProgress('not json')).toThrow(/valid JSON/)

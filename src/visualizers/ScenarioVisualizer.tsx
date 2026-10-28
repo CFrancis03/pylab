@@ -45,7 +45,7 @@ export default function ScenarioVisualizer({ scenarios, onFinished }: Props) {
           const f = s.frames[i]
           return (
             <div className="viz-grid">
-              <ol className="viz-code" aria-label="Code">
+              <ol className="viz-code" aria-label="Code" tabIndex={0}>
                 {s.code.split('\n').map((line, n) => (
                   <li key={n} className={f.line === n + 1 ? 'cur' : ''} aria-current={f.line === n + 1 ? 'step' : undefined}>
                     <code>{line || ' '}</code>
@@ -55,12 +55,12 @@ export default function ScenarioVisualizer({ scenarios, onFinished }: Props) {
               {'tracks' in f ? (
                 <TraceTracks tracks={f.tracks} />
               ) : (
-                <div className="diagram-wrap">
+                <div className="diagram-wrap" tabIndex={0}>
                   <NameDiagram frame={f} />
                 </div>
               )}
               <p className="viz-note" data-testid="viz-note">{f.note}</p>
-              <pre className="viz-out" aria-label="Printed output" data-testid="viz-out">{f.out.length ? f.out.join('\n') : '(nothing printed yet)'}</pre>
+              <pre className="viz-out" tabIndex={0} aria-label="Printed output" data-testid="viz-out">{f.out.length ? f.out.join('\n') : '(nothing printed yet)'}</pre>
             </div>
           )
         }}

@@ -46,8 +46,15 @@ export const progressSchema = z.object({
   /** Flashcard scheduling: Leitner box and next-due day, keyed `activityId#index`. */
   cards: z.record(z.string(), z.object({ box: z.number().int().min(0).max(5), due: z.string() })).default({}),
   settings: z
-    .object({ theme: z.enum(THEMES), freeRoam: z.boolean() })
-    .default({ theme: 'system', freeRoam: false }),
+    .object({
+      theme: z.enum(THEMES),
+      freeRoam: z.boolean(),
+      /** Short synthesized sound effects. Off until asked for. */
+      sound: z.boolean().default(false),
+      /** Animations and celebrations. */
+      motion: z.boolean().default(true),
+    })
+    .default({ theme: 'system', freeRoam: false, sound: false, motion: true }),
 })
 
 export type Progress = z.infer<typeof progressSchema>
@@ -76,7 +83,7 @@ export const emptyProgress = (): Progress => ({
   practice: 0,
   exams: [],
   cards: {},
-  settings: { theme: 'system', freeRoam: false },
+  settings: { theme: 'system', freeRoam: false, sound: false, motion: true },
 })
 
 export function parseProgress(text: string): Progress {

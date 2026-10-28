@@ -16,6 +16,13 @@ Under **Study** in the header:
 
 Review and exam answers count toward your stats and streak but never pay XP or mark lessons complete.
 
+## Offline, speed and accessibility
+
+- **Works offline.** A service worker (generated at build time) caches the app, so lessons work with no connection after the first visit. **Settings → Offline use** also saves the 13 MB Python runtime so code challenges run offline. The runtime lives in its own long-lived cache, so a new deploy never re-downloads it. When a new version is ready, a banner offers "Reload to update" and never reloads mid-quiz.
+- **Fast first load.** The map and study pages load only the app, React and zod (about 205 kB gzipped). The code editor (CodeMirror), each mini-game and the Python runtime load only when an activity needs them.
+- **Accessible.** The whole site passes an axe-core audit (WCAG 2.1 AA and best practice) in light and dark themes at desktop and phone widths, with no horizontal scrolling at 375 px. There is a skip link, focus moves to the page on navigation, and the code editor is not a keyboard trap (press Esc, then Tab, to leave it).
+- **Sound and motion.** Optional synthesized sound effects (off by default) and a switch for animations and confetti. Animations also turn off automatically when the device asks for reduced motion.
+
 ## Develop
 
 ```bash

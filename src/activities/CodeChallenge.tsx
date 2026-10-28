@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { CodeChallenge as CC } from '../content/schema'
 import { runPython, warmUp } from '../engine/runner'
 import type { RunResult } from '../engine/types'
 import { xpAfterHints } from '../game/xp'
-import CodeEditor from '../ui/CodeEditor'
 import { useEngineStatus } from '../ui/useEngineStatus'
 import Feedback from './Feedback'
 import Md, { Rich } from '../ui/Md'
 import RunOutput from './RunOutput'
+
+// CodeMirror is large and only needed where there is something to type, so it loads on demand.
+const CodeEditor = lazy(() => import('../ui/CodeEditor'))
 
 interface Props {
   a: CC
@@ -57,7 +59,9 @@ export default function CodeChallenge({ a, onSubmit, allowHints = true, lockOnPa
   return (
     <div className="challenge">
       <Md text={a.prompt} />
-      <CodeEditor value={code} onChange={setCode} onRun={() => void run(true)} label={`Code editor for ${a.title}`} readOnly={locked} />
+      <Suspense fallback={<div className="editor-loading muted" role="status">Loading the code editor…</div>}>
+        <CodeEditor value={code} onChange={setCode} onRun={() => void run(true)} label={`Code editor for ${a.title}`} readOnly={locked} />
+      </Suspense>
       <div className="row">
         <button className="ghost" onClick={() => void run(false)} disabled={busy || locked} data-testid="run">▶ Run</button>
         <button onClick={() => void run(true)} disabled={busy || locked} data-testid="submit">✔ Submit</button>
@@ -65,7 +69,7 @@ export default function CodeChallenge({ a, onSubmit, allowHints = true, lockOnPa
         <button className="ghost" onClick={() => { setCode(a.starter); setResult(null) }} disabled={busy || locked}>Reset</button>
         <span className="muted small" data-testid="engine-status">{STATUS_TEXT[status]}</span>
       </div>
-      <p className="muted small">Ctrl/Cmd+Enter submits. “Run” just runs your code; “Submit” also runs the hidden checks.</p>
+      <p className="muted small">Ctrl/Cmd+Enter submits. Press Esc, then Tab, to leave the editor. “Run” just runs your code; “Submit” also runs the hidden checks.</p>
 
       {allowHints && a.hints.length > 0 && !locked && (
         <div className="hints">

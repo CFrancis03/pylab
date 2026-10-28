@@ -33,7 +33,7 @@ export default function Mcq({ q, retry, onResult }: Props) {
   return (
     <div className="mcq">
       <p className="question"><Rich text={q.question} /></p>
-      {q.code && <pre className="code"><code>{q.code}</code></pre>}
+      {q.code && <pre className="code" tabIndex={0}><code>{q.code}</code></pre>}
       {multi && <p className="muted small">Select all that apply.</p>}
       <div className="options" role={multi ? 'group' : 'radiogroup'} aria-label="Answer options">
         {q.options.map((o, i) => {

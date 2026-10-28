@@ -6,10 +6,11 @@
   --ink: #1b2a1f;
   --ink-soft: #52624f;
   --line: #cfd9c3;
-  --accent: #2f8f4e;      /* python green */
+  --accent: #2a7f45;      /* python green; white on it passes 4.5:1 */
   --accent-ink: #ffffff;
   --gold: #e0a100;        /* XP / rewards */
-  --danger: #c8412f;
+  --gold-ink: #8a6200;    /* gold for small text on a light surface (5.5:1) */
+  --danger: #b03624;
   --ok: #2f8f4e;
   --radius: 14px;
   --shadow: 0 2px 0 rgba(0, 0, 0, 0.08), 0 8px 24px rgba(30, 50, 30, 0.08);
@@ -29,6 +30,7 @@
     --accent: #4cc16f;
     --accent-ink: #08130c;
     --gold: #f5c542;
+    --gold-ink: #f5c542;
     --danger: #ff7a66;
     --ok: #4cc16f;
     --shadow: 0 2px 0 rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -45,6 +47,7 @@
   --accent: #4cc16f;
   --accent-ink: #08130c;
   --gold: #f5c542;
+  --gold-ink: #f5c542;
   --danger: #ff7a66;
   --ok: #4cc16f;
   --shadow: 0 2px 0 rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);

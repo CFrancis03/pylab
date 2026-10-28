@@ -18,7 +18,7 @@ export default function PredictOutput({ a, onResult }: { a: PO; onResult: (corre
   return (
     <div>
       <p className="question"><Rich text={a.prompt} /></p>
-      <pre className="code"><code>{a.code}</code></pre>
+      <pre className="code" tabIndex={0}><code>{a.code}</code></pre>
       <label className="field">
         <span className="muted small">Your answer (exactly what is printed, one line per line)</span>
         <textarea value={guess} rows={Math.max(2, a.expected.split('\n').length)} disabled={locked} spellCheck={false}
@@ -35,7 +35,7 @@ export default function PredictOutput({ a, onResult }: { a: PO; onResult: (corre
       {state === 'revealed' && (
         <Feedback kind="info">
           <strong>It prints:</strong>
-          <pre className="code"><code>{a.expected}</code></pre>
+          <pre className="code" tabIndex={0}><code>{a.expected}</code></pre>
           <Rich text={a.explanation} />
         </Feedback>
       )}

@@ -85,7 +85,7 @@ export default function SliceExplorer({ onFinished }: Props) {
         ))}
       </div>
 
-      <div className="slice-cells" role="img" aria-label={`${seq.name} has ${seq.items.length} items. ${expr} picks indices ${idx.join(', ') || 'none'}.`}>
+      <div className="slice-cells" tabIndex={0} role="img" aria-label={`${seq.name} has ${seq.items.length} items. ${expr} picks indices ${idx.join(', ') || 'none'}.`}>
         {seq.items.map((it, i) => {
           const order = idx.indexOf(i)
           return (

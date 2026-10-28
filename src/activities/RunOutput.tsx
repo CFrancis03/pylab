@@ -5,9 +5,9 @@ export default function RunOutput({ result, graded }: { result: RunResult; grade
   const checks = result.results ?? []
   return (
     <div className="run-output" data-testid="run-output">
-      {result.stdout && <pre className="out-pre" data-testid="stdout">{result.stdout}</pre>}
-      {result.stderr && <pre className="out-pre err">{result.stderr}</pre>}
-      {result.error && <pre className="out-pre err" data-testid="error">{result.error}</pre>}
+      {result.stdout && <pre className="out-pre" tabIndex={0} data-testid="stdout">{result.stdout}</pre>}
+      {result.stderr && <pre className="out-pre err" tabIndex={0}>{result.stderr}</pre>}
+      {result.error && <pre className="out-pre err" tabIndex={0} data-testid="error">{result.error}</pre>}
       {result.truncated && <p className="muted small">Output was cut off.</p>}
       {graded && checks.length > 0 && (
         <ul className="checks" data-testid="checks">

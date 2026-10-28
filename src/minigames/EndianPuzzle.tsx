@@ -47,7 +47,7 @@ function EndianLevelView({ level, cleared, onSolved }: { level: EndianLevel; cle
         ))}
         {fields.length < 6 && <button className="ghost" onClick={() => update(order, [...fields, 'B'])} data-testid="add-field">+ field</button>}
       </div>
-      <pre className="out-pre" data-testid="struct-call">{`struct.unpack('${formatString(order, fields)}', data)`}</pre>
+      <pre className="out-pre" tabIndex={0} data-testid="struct-call">{`struct.unpack('${formatString(order, fields)}', data)`}</pre>
       <p className="viz-note" role="status" data-testid="struct-result">
         {result.ok ? <>→ <code>{show(result.values)}</code> {win ? '✓ That is the target!' : <span className="muted">Target: <code>{show(level.target)}</code></span>}</> : <span className="err-text">struct.error: {result.error}</span>}
       </p>

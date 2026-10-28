@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Activity } from '../content/schema'
 import { completeActivity } from '../game/store'
 import Md from '../ui/Md'
@@ -21,9 +22,9 @@ export default function ActivityView({ a, done }: { a: Activity; done: boolean }
     case 'concept':
       return (
         <>
-          <h3>{a.title}</h3>
+          <h2 className="activity-title">{a.title}</h2>
           <Md text={a.body} />
-          {a.code && <pre className="code"><code>{a.code}</code></pre>}
+          {a.code && <pre className="code" tabIndex={0}><code>{a.code}</code></pre>}
           {!done && <button onClick={() => report(true)}>Got it</button>}
         </>
       )
@@ -38,14 +39,14 @@ export default function ActivityView({ a, done }: { a: Activity; done: boolean }
     case 'flashcards':
       return (
         <>
-          <h3>{a.title}</h3>
+          <h2 className="activity-title">{a.title}</h2>
           <Flashcards a={a} onFinished={() => report(true)} />
         </>
       )
     case 'code-challenge':
       return (
         <>
-          <h3>{a.title}</h3>
+          <h2 className="activity-title">{a.title}</h2>
           <CodeChallenge a={a} onSubmit={(ok, xp) => report(ok, xp)} />
         </>
       )
@@ -54,7 +55,7 @@ export default function ActivityView({ a, done }: { a: Activity; done: boolean }
       if (EXPLORERS[a.name]) {
         return (
           <>
-            <h3>{a.title}</h3>
+            <h2 className="activity-title">{a.title}</h2>
             <SliceExplorer onFinished={() => report(true)} />
           </>
         )
@@ -62,7 +63,7 @@ export default function ActivityView({ a, done }: { a: Activity; done: boolean }
       if (IMPLEMENTED[a.name]) {
         return (
           <>
-            <h3>{a.title}</h3>
+            <h2 className="activity-title">{a.title}</h2>
             <ScenarioVisualizer scenarios={scenarios} onFinished={() => report(true)} />
           </>
         )
@@ -74,8 +75,10 @@ export default function ActivityView({ a, done }: { a: Activity; done: boolean }
       if (!Game) return <Placeholder a={a} done={done} report={report} />
       return (
         <>
-          <h3>{a.title}</h3>
-          <Game onFinished={() => report(true)} />
+          <h2 className="activity-title">{a.title}</h2>
+          <Suspense fallback={<p className="muted" role="status">Loading the game…</p>}>
+            <Game onFinished={() => report(true)} />
+          </Suspense>
         </>
       )
     }

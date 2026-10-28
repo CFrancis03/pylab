@@ -41,7 +41,7 @@ export default function CheatSheetPage() {
               <article key={c.title + c.lesson} className="sheet-concept">
                 <h3>{c.title}</h3>
                 <Md text={c.body} />
-                {c.code && <pre className="code"><code>{c.code}</code></pre>}
+                {c.code && <pre className="code" tabIndex={0}><code>{c.code}</code></pre>}
               </article>
             ))}
             {facts && s.facts.length > 0 && (

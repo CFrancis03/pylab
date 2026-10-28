@@ -30,9 +30,10 @@ export default function Flashcards({ a, onFinished }: { a: F; onFinished: () => 
   return (
     <div>
       <p className="muted small" data-testid="cards-count">{known}/{a.cards.length} learned · {queue.length} left</p>
-      <button className={`flashcard${flipped ? ' flipped' : ''}`} onClick={() => setFlipped((f) => !f)} data-testid="card" aria-label={flipped ? 'Answer. Click to see the question' : 'Question. Click to reveal the answer'}>
+      <button className={`flashcard${flipped ? ' flipped' : ''}`} onClick={() => setFlipped((f) => !f)} data-testid="card">
         <span className="side">{flipped ? 'Answer' : 'Question'}</span>
         <span className="face" data-testid="card-face"><Rich text={flipped ? a.cards[current].back : a.cards[current].front} /></span>
+        <span className="sr-only"> (press to {flipped ? 'see the question' : 'reveal the answer'})</span>
       </button>
       {flipped ? (
         <div className="row">
